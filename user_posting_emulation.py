@@ -14,6 +14,7 @@ with open('cred/db_creds.yaml', 'r') as f:
     db_cred = yaml.load(f, Loader=yaml.SafeLoader)
 
 
+
 class AWSDBConnector:
 
     def __init__(self):
@@ -31,6 +32,16 @@ class AWSDBConnector:
 
 new_connector = AWSDBConnector()
 
+invoke_url = 'https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1'
+
+# Function to send data to Kafka topics via the API
+
+
+def send_data_to_kafka(data, topic):
+    url = f"{invoke_url}/{topic}"
+    response = requests.post(url, json=data)
+    print(f"Sent data to {topic}: Status Code: {
+          response.status_code}, Response: {response.text}")
 
 def run_infinite_post_data_loop():
     while True:
