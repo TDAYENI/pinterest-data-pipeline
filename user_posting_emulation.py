@@ -42,7 +42,7 @@ def send_data_to_kafka(data, topic):
     url = f"{invoke_url}/topics/{topic}"
     headers = {'Content-Type': 'application/vnd.kafka.json.v2+json'}
 
-    # Create the payload format expected by Kafka
+    # payload is a list of records
     payload = json.dumps({
         "records": [
             {"value": data}
@@ -52,6 +52,7 @@ def send_data_to_kafka(data, topic):
     response = requests.post(url, headers=headers, data=payload)
     print(f"Sent data to {topic}: Status Code: {
           response.status_code}, Response: {response.text}")
+
 
 def run_infinite_post_data_loop():
     while True:
@@ -63,15 +64,20 @@ def run_infinite_post_data_loop():
 
             pin_string = text(f"SELECT * FROM pinterest_data LIMIT {random_row}, 1")
             pin_selected_row = connection.execute(pin_string)
+           
             
             for row in pin_selected_row:
-                pin_result = dict(row._mapping)
+                pin_result = dict(row._mapping) 
+                send_data_to_kafka(pin_result, "0e2685691ff5.pin")
 
             geo_string = text(f"SELECT * FROM geolocation_data LIMIT {random_row}, 1")
             geo_selected_row = connection.execute(geo_string)
             
             for row in geo_selected_row:
                 geo_result = dict(row._mapping)
+                geo_result['timestamp'] = geo_result['timestamp'].isoformat()
+                # Send geolocation data to the corresponding Kafka topic
+                send_data_to_kafka(geo_result, "0e2685691ff5.geo")
 
             user_string = text(f"SELECT * FROM user_data LIMIT {random_row}, 1")
             user_selected_row = connection.execute(user_string)
