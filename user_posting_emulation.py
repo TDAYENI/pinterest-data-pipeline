@@ -7,9 +7,10 @@ import json
 import sqlalchemy
 from sqlalchemy import text
 import yaml
-
+from datetime import datetime
 
 random.seed(100)
+#load db credenntials
 with open('cred/db_creds.yaml', 'r') as f:
     db_cred = yaml.load(f, Loader=yaml.SafeLoader)
 
@@ -31,15 +32,24 @@ class AWSDBConnector:
 
 
 new_connector = AWSDBConnector()
-
+#url for invoking API
 invoke_url = 'https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1'
 
 # Function to send data to Kafka topics via the API
 
 
 def send_data_to_kafka(data, topic):
-    url = f"{invoke_url}/{topic}"
-    response = requests.post(url, json=data)
+    url = f"{invoke_url}/topics/{topic}"
+    headers = {'Content-Type': 'application/vnd.kafka.json.v2+json'}
+
+    # Create the payload format expected by Kafka
+    payload = json.dumps({
+        "records": [
+            {"value": data}
+        ]
+    })
+
+    response = requests.post(url, headers=headers, data=payload)
     print(f"Sent data to {topic}: Status Code: {
           response.status_code}, Response: {response.text}")
 
