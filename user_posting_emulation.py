@@ -31,7 +31,7 @@ class AWSDBConnector:
         return engine
 
 
-new_connector = AWSDBConnector()
+
 #url for invoking API
 invoke_url = 'https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1'
 
@@ -49,10 +49,13 @@ def send_data_to_kafka(data, topic):
         ]
     })
 
-    response = requests.post(url, headers=headers, data=payload)
-    print(f"Sent data to {topic}: Status Code: {
-          response.status_code}, Response: {response.text}")
-
+    try:
+        response = requests.post(url, headers=headers, data=payload)
+        response.raise_for_status()  # Raises exception for HTTP errors
+        print(f"Sent data to {topic}: Status Code: {
+              response.status_code}, Response: {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending data to Kafka: {e}")
 
 def run_infinite_post_data_loop():
     while True:
@@ -84,13 +87,17 @@ def run_infinite_post_data_loop():
             
             for row in user_selected_row:
                 user_result = dict(row._mapping)
+                user_result['date_joined'] = user_result['date_joined'].isoformat()
+                # Send user data to the corresponding Kafka topic
+                send_data_to_kafka(user_result, "0e2685691ff5.user")
+
+            print("Sent data to Kafka topics.")
+
             
-            print(pin_result)
-            print(geo_result)
-            print(user_result)
 
 
 if __name__ == "__main__":
+    new_connector = AWSDBConnector()
     run_infinite_post_data_loop()
     print('Working')
 
