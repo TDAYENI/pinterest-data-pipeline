@@ -46,6 +46,15 @@ headers = {'Content-Type': 'application/json'}
 
 
 def send_data_to_kinesis(data, stream_name, invoke_url):
+    """_summary_
+
+    Send data to a Kinesis stream via the API.
+
+    Args:
+        data (dict): The data to be sent to the Kinesis stream.
+        stream_name (str): The name of the Kinesis stream.
+        invoke_url (str): The API endpoint URL for the Kinesis stream.
+    """
     payload = json.dumps({
         "StreamName": stream_name,
         "Data": data,
@@ -53,6 +62,7 @@ def send_data_to_kinesis(data, stream_name, invoke_url):
     })
 
     try:
+        # PUT request to send data to Kinesis stream
         response = requests.put(invoke_url, headers=headers, data=payload)
         response.raise_for_status()
         print(f"Sent data to {stream_name}: Status Code: {
@@ -77,7 +87,7 @@ def run_infinite_post_data_loop():
                 f"SELECT * FROM pinterest_data LIMIT {random_row}, 1")
             pin_selected_row = connection.execute(pin_string)
             for row in pin_selected_row:
-                pin_result = dict(row._mapping)
+                pin_result = dict(row._mapping) # converts data to dicitonary
                 send_data_to_kinesis(
                     pin_result, pin_stream_name, pin_invoke_url)
 
@@ -95,7 +105,7 @@ def run_infinite_post_data_loop():
             user_selected_row = connection.execute(user_string)
             for row in user_selected_row:
                 user_result = dict(row._mapping)
-                user_result['date_joined'] = user_result['date_joined'].isoformat()
+                user_result['date_joined'] = user_result['date_joined'].isoformat() # converts date joined into ISO format
                 send_data_to_kinesis(
                     user_result, user_stream_name, user_invoke_url)
 
