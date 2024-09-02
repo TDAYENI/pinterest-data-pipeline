@@ -4,7 +4,7 @@
 - [Description](#description)
 - [Project Dependencies](#project-dependencies)
 - [The Dataset](#the-dataset)
-- [Utilized Tools](#utilized-tools)
+- [Utilised Tools](#Utilised-tools)
   - [Apache Kafka](#apache-kafka)
   - [AWS MSK (Amazon Managed Streaming for Apache Kafka)](#aws-msk-amazon-managed-streaming-for-apache-kafka)
   - [AWS MSK Connect](#aws-msk-connect)
@@ -33,7 +33,7 @@
 
 ## Description
 
-Pinterest crunches billions of data points every day to provide more value to its users. In this project, I created a similar system using AWS Cloud. The project was planned for a month and involved setting up a comprehensive data pipeline that mirrors Pinterest's data processing operations.
+Pinterest crunches billions of data points every day to provide more value to its users. This this project emulates this feature using AWS Cloud to setup a comprehensive data pipeline that mirrors Pinterest's data processing operations.
 
 The project is divided into three main parts:
 - **Setup**
@@ -42,23 +42,24 @@ The project is divided into three main parts:
 
 ## Project Dependencies
 
-To execute this project, the following Python packages are required:
+To execute this project, the required Python packages are located in the `environment.yml` 
 
-- `python-dotenv`
-- `sqlalchemy`
-- `requests`
+Follow the [_Creating an environment from an environment.yml file_](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) instructions in the link for a guide on how to replicate the conda environment.
 
 ## The Dataset
 
 The project includes a script (`user_posting_emulation.py`) that simulates the flow of data points similar to those received by Pinterest's API during user data uploads. This data is stored in an AWS RDS database with the following tables:
 
 - **pinterest_data**: Data about posts being uploaded to Pinterest.
-- **geolocation_data**: Geolocation data related to each Pinterest post.
+- **geolocation_data**: Geolocated data related to each  post.
 - **user_data**: Information about the users uploading the posts.
 
 The script continuously cycles through random intervals, selecting rows from each table and compiling them into dictionaries for further processing.
 
-## Utilized Tools
+## Utilised Tools
+
+
+![alt text for screen readers](/images/CloudPinterestPipeline.jpeg "Diagram of the architecture ")
 
 ### Apache Kafka
 Apache Kafka is an event streaming platform used to process streaming data in real time.
