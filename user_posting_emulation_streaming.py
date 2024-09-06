@@ -36,9 +36,12 @@ pin_stream_name = "streaming-0e2685691ff5-pin"
 geo_stream_name = "streaming-0e2685691ff5-geo"
 user_stream_name = "streaming-0e2685691ff5-user"
 
-pin_invoke_url = f"https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1/streams/{pin_stream_name}/record"
-geo_invoke_url = f"https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1/streams/{geo_stream_name}/record"
-user_invoke_url = f"https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1/streams/{user_stream_name}/record"
+pin_invoke_url = f"https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1/streams/{
+    pin_stream_name}/record"
+geo_invoke_url = f"https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1/streams/{
+    geo_stream_name}/record"
+user_invoke_url = f"https://pzp2pscs5m.execute-api.us-east-1.amazonaws.com/v1/streams/{
+    user_stream_name}/record"
 
 headers = {'Content-Type': 'application/json'}
 
@@ -87,7 +90,7 @@ def run_infinite_post_data_loop():
                 f"SELECT * FROM pinterest_data LIMIT {random_row}, 1")
             pin_selected_row = connection.execute(pin_string)
             for row in pin_selected_row:
-                pin_result = dict(row._mapping) # converts data to dicitonary
+                pin_result = dict(row._mapping)  # converts data to dicitonary
                 send_data_to_kinesis(
                     pin_result, pin_stream_name, pin_invoke_url)
 
@@ -105,7 +108,8 @@ def run_infinite_post_data_loop():
             user_selected_row = connection.execute(user_string)
             for row in user_selected_row:
                 user_result = dict(row._mapping)
-                user_result['date_joined'] = user_result['date_joined'].isoformat() # converts date joined into ISO format
+                # converts date joined into ISO format
+                user_result['date_joined'] = user_result['date_joined'].isoformat()
                 send_data_to_kinesis(
                     user_result, user_stream_name, user_invoke_url)
 
