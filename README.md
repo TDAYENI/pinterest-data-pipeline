@@ -89,7 +89,7 @@ Databricks is a platform that provides tools for running Apache Spark applicatio
 
 ### Setting up the EC2 Instance & Apache Kafka
 
-To set up the foundational components of this project:
+
 
 1. **Create a Key Pair File:**
    - In the AWS console, generate a key-pair file for authentication.
@@ -195,7 +195,6 @@ Your main project folder should have the following structure:
 ```plaintext
 pinterest-data-pipeline/
 ├── images/                             # Images used in the documentation
-├── .gitignore                          # Specifies files and directories to ignore in Git
 ├── 0abb070c336b_dag.py                 # DAG file for Apache Airflow
 ├── 0abb070c336-key-pair.pem            # Key pair file for authentication
 ├── batch_data_cleaning.ipynb           # Jupyter Notebook for batch data cleaning
