@@ -100,9 +100,12 @@ Databricks is a platform that provides tools for running Apache Spark applicatio
 3. **Launch an EC2 Instance:**
    - Use the Amazon Linux 2 AMI to create an EC2 instance and install Kafka and IAM MSK authentication packages on the client EC2 machine.
 
+
+
 4. **Configure Kafka Client Properties:**
    - Modify the Kafka client properties to enable AWS IAM authentication.
-
+``Client.properties`` should be configured in a similar manner to the image below to enable AWS IAM authentication and establish the connection between your EC2
+![alt text for screen readers](/images/client_properties.png "client.properties configuration ")
 5. **Create MSK Clusters and Kafka Topics:**
    - Set up Amazon MSK clusters and create Kafka topics for the three data tables.
 
@@ -125,6 +128,10 @@ Databricks is a platform that provides tools for running Apache Spark applicatio
 1. **Create and Configure an API:**
    - Set up a REST API in AWS API Gateway, create child resources, and configure methods to interact with the Kinesis streams.
 
+Configuration of API Endpoints
+
+![API Endpoints](/images/api_endpoints.png "API Endpoints ")
+
 2. **Deploy the API:**
    - Deploy the API to obtain an invoke URL, which is used to send data to the Kafka topics via the API.
 
@@ -134,7 +141,9 @@ Databricks is a platform that provides tools for running Apache Spark applicatio
    - Install the Confluent package for Kafka REST Proxy on the EC2 client machine.
 
 2. **Configure the `kafka-rest.properties`:**
-   - Modify the properties file to specify the bootstrap server and IAM role.
+   - Modify the properties file to specify the bootstrap server and IAM role, see an example below.
+
+![alt text for screen readers](/images/kafka_properties.png "client.properties configuration ")
 
 3. **Deploy the REST Proxy API:**
    - Deploy the API and use it to send data to Kafka topics.
@@ -196,7 +205,6 @@ Your main project folder should have the following structure:
 pinterest-data-pipeline/
 ├── images/                             # Images used in the documentation
 ├── 0abb070c336b_dag.py                 # DAG file for Apache Airflow
-├── 0abb070c336-key-pair.pem            # Key pair file for authentication
 ├── batch_data_cleaning.ipynb           # Jupyter Notebook for batch data cleaning
 ├── batch_queries.ipynb                 # Jupyter Notebook for batch data analysis
 ├── README.md                           # Main documentation file
